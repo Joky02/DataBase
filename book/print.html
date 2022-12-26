@@ -292,7 +292,7 @@
 <ul>
 <li>自然连接是一种特殊的等值连接。他要求两个关系中进行比较的分量必须是同名的属性组，并且在结果中把重复的属性列去掉。</li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="ch3-sql-1216"><a class="header" href="#ch3-sql-1216">CH3 SQL 12.16</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ch3-sql"><a class="header" href="#ch3-sql">CH3 SQL</a></h1>
 <p>简述SQL语言的特点；</p>
 <ul>
 <li>综合统一</li>
@@ -396,7 +396,7 @@ from &lt;表名或视图名&gt;[, &lt;表明或视图名&gt;] | (&lt;select 语�
 <li>更新触发器；</li>
 <li>删除触发器。</li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="ch6-关系数据理论"><a class="header" href="#ch6-关系数据理论">CH6. 关系数据理论</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ch6-关系数据理论"><a class="header" href="#ch6-关系数据理论">CH6 关系数据理论</a></h1>
 <p>数据依赖：函数依赖和多值依赖</p>
 <ul>
 <li>完全函数依赖：如果 $X \rightarrow Y$， 并且对于 $X$ 的任何一个真子集 $X'$，都有 $X'$ not $\rightarrow Y$，则称 $Y$ 对 $X$ 完全函数依赖。</li>
@@ -544,7 +544,7 @@ CALL/PERFORM  Procedure 过程名(［参数1，参数2，...］)；
 <li>删除存储过程
 DROP  PROCEDURE 过程名()；</li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="ch10-数据库恢复技术-恢复机制的工作原理数据冗余-1218"><a class="header" href="#ch10-数据库恢复技术-恢复机制的工作原理数据冗余-1218">CH10 数据库恢复技术 //恢复机制的工作原理：数据冗余 12.18</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ch10-数据库恢复技术-恢复机制的工作原理数据冗余"><a class="header" href="#ch10-数据库恢复技术-恢复机制的工作原理数据冗余">CH10 数据库恢复技术 //恢复机制的工作原理：数据冗余</a></h1>
 <p>事务的 4 个特性是什么？举例说明其中的一个特性；</p>
 <ul>
 <li>原子性（Atomicity）//出故障
@@ -605,13 +605,120 @@ DROP  PROCEDURE 过程名()；</li>
 <p>故障恢复策略的工作原理：冗余。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ch11-并发控制"><a class="header" href="#ch11-并发控制">CH11 并发控制</a></h1>
 <p>什么是事务的串行调度？并发调度？</p>
+<ul>
+<li>串行调度：一个调度中，属于一个事务的所有操作连续执行，称之为串行调度。 </li>
+<li>并发调度：多个事务同时执行的调度。</li>
+</ul>
 <p>如果不加以控制，事务的并发调度可能会产生什么问题？</p>
+<ul>
+<li>丢失修改
+<ul>
+<li>两个事务 $T_1$ 和 $T_2$ 读入同一数据并修改，$T_2$ 提交的结果破坏了 $T_1$ 提交的结果，导致 $T_1$ 的修改被丢失。</li>
+</ul>
+</li>
+<li>不可重复读
+<ul>
+<li>指事务 $T_1$ 读取数据后，事务 $T_2$ 执行更新操作，使 $T_1$ 无法再现前一次读取结果。</li>
+</ul>
+</li>
+<li>读脏数据
+<ul>
+<li>指事务 $T_1$ 修改某一数据并将其写回磁盘，事务 $T_2$ 读取同一数据后，$T_1$ 由于某种原因被撤销，这时被 $T_1$ 修改过的数据恢复原值， $T_2$ 读到的数据就与数据库中的数据不一致，则 $T_2$ 读到的数据就为脏数据。</li>
+</ul>
+</li>
+</ul>
 <p>简述封锁机制的工作原理；</p>
-<p>引入封锁机制，如何解决上述3个问题？
-死锁预防、诊断；死锁的判别；
-冲突操作对；事务优先图；等价的串行调度；
-2PL协议；
-多粒度封锁协议。</p>
+<ul>
+<li>封锁就是事务 $T$ 在对某个数据对象（例如表、记录等）操作之前，先向系统发出请求，对其加锁。</li>
+<li>加锁后事务 $T$ 就对该数据对象有了一定的控制，在事务T释放它的锁之前，其它的事务不能更新此数据对象。</li>
+</ul>
+<p>引入封锁机制，如何解决上述3个问题？</p>
+<p><img src="./pic/11-1.bmp" alt="" /></p>
+<p><img src="./pic/11-2.bmp" alt="" /></p>
+<p><img src="./pic/11-3.bmp" alt="" /></p>
+<p>死锁预防</p>
+<ul>
+<li>一次封锁法
+<ul>
+<li>要求每个事务必须一次将所有要使用的数据全部加锁，否则就不能继续执行</li>
+<li>存在的问题
+<ul>
+<li>降低系统并发度</li>
+<li>难于事先精确确定封锁对象</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>顺序封锁法
+<ul>
+<li>顺序封锁法是预先对数据对象规定一个封锁顺序，所有事务都按这个顺序实行封锁。</li>
+<li>顺序封锁法存在的问题
+<ul>
+<li>维护成本：数据库系统中封锁的数据对象极多，并且在不断地变化。</li>
+<li>难以实现：很难事先确定每一个事务要封锁哪些对象</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>死锁诊断、死锁的判别；</p>
+<ul>
+<li>超时法
+<ul>
+<li>如果一个事务的等待时间超过了规定的时限，就认为发生了死锁</li>
+<li>优点：实现简单</li>
+<li>缺点
+<ul>
+<li>有可能误判死锁</li>
+<li>时限若设置得太长，死锁发生后不能及时发现</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>事务等待图法
+<ul>
+<li>用事务等待图动态反映所有事务的等待情况
+<ul>
+<li>事务等待图是一个有向图G=(T，U)</li>
+<li>T为结点的集合，每个结点表示正运行的事务</li>
+<li>U为边的集合，每条边表示事务等待的情况</li>
+<li>若T1等待T2，则T1，T2之间划一条有向边，从T1指向T2</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>冲突操作对；</p>
+<ul>
+<li>指不同事物对同一个数据的读写操作和写写操作。</li>
+</ul>
+<p>事务优先图；</p>
+<p>等价的串行调度；</p>
+<p>2PL协议；</p>
+<ul>
+<li>指所有事务必须分两个阶段对数据项加锁和解锁 
+<ul>
+<li>在对任何数据进行读、写操作之前，事务首先要获得对该数据的封锁</li>
+<li>在释放一个封锁之后，事务不再申请和获得任何其他封锁</li>
+</ul>
+</li>
+</ul>
+<p>多粒度封锁协议。</p>
+<ul>
+<li>在一个系统中同时支持多种封锁粒度供不同的事务选择</li>
+<li>选择封锁粒度
+<ul>
+<li>同时考虑封锁开销和并发度两个因素，适当选择封锁粒度
+<ul>
+<li>需要处理多个关系的大量元组的用户事务：以数据库为封锁单位</li>
+<li>需要处理大量元组的用户事务：以关系为封锁单元</li>
+<li>只处理少量元组的用户事务：以元组为封锁单位</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>在多粒度封锁中一个数据对象可能以两种方式封锁：显式封锁和隐式封锁</p>
 
                     </main>
 
@@ -630,6 +737,22 @@ DROP  PROCEDURE 过程名()；</li>
 
         </div>
 
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
 
 
 
