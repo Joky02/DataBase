@@ -1,9 +1,10 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="zh" class="sidebar-visible no-js light">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>CH6 关系数据理论</title>
+        <title>Page not found - 笔记</title>
+        <base href="/">
 
 
         <!-- Custom HTML head -->
@@ -80,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="CH1.html"><strong aria-hidden="true">1.</strong> CH1 绪论</a></li><li class="chapter-item expanded "><a href="CH2.html"><strong aria-hidden="true">2.</strong> CH2 关系数据库/关系数据模型理论</a></li><li class="chapter-item expanded "><a href="CH3.html"><strong aria-hidden="true">3.</strong> CH3 SQL</a></li><li class="chapter-item expanded "><a href="CH4.html"><strong aria-hidden="true">4.</strong> CH4 数据库安全性</a></li><li class="chapter-item expanded "><a href="CH5.html"><strong aria-hidden="true">5.</strong> CH5 数据库完整性</a></li><li class="chapter-item expanded "><a href="CH6.html" class="active"><strong aria-hidden="true">6.</strong> CH6 关系数据理论</a></li><li class="chapter-item expanded "><a href="CH7.html"><strong aria-hidden="true">7.</strong> CH7 数据库设计</a></li><li class="chapter-item expanded "><a href="CH8.html"><strong aria-hidden="true">8.</strong> CH8 数据库编程</a></li><li class="chapter-item expanded "><a href="CH10.html"><strong aria-hidden="true">9.</strong> CH10 数据库恢复技术</a></li><li class="chapter-item expanded "><a href="CH11.html"><strong aria-hidden="true">10.</strong> CH11 并发控制</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="CH1.html"><strong aria-hidden="true">1.</strong> CH1 绪论</a></li><li class="chapter-item expanded "><a href="CH2.html"><strong aria-hidden="true">2.</strong> CH2 关系数据库/关系数据模型理论</a></li><li class="chapter-item expanded "><a href="CH3.html"><strong aria-hidden="true">3.</strong> CH3 SQL</a></li><li class="chapter-item expanded "><a href="CH4.html"><strong aria-hidden="true">4.</strong> CH4 数据库安全性</a></li><li class="chapter-item expanded "><a href="CH5.html"><strong aria-hidden="true">5.</strong> CH5 数据库完整性</a></li><li class="chapter-item expanded "><a href="CH6.html"><strong aria-hidden="true">6.</strong> CH6 关系数据理论</a></li><li class="chapter-item expanded "><a href="CH7.html"><strong aria-hidden="true">7.</strong> CH7 数据库设计</a></li><li class="chapter-item expanded "><a href="CH8.html"><strong aria-hidden="true">8.</strong> CH8 数据库编程</a></li><li class="chapter-item expanded "><a href="CH10.html"><strong aria-hidden="true">9.</strong> CH10 数据库恢复技术</a></li><li class="chapter-item expanded "><a href="CH11.html"><strong aria-hidden="true">10.</strong> CH11 并发控制</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -109,7 +110,7 @@
                         </button>
                     </div>
 
-                    <h1 class="menu-title"></h1>
+                    <h1 class="menu-title">笔记</h1>
 
                     <div class="right-buttons">
                         <a href="print.html" title="Print this book" aria-label="Print this book">
@@ -141,65 +142,14 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="ch6-关系数据理论"><a class="header" href="#ch6-关系数据理论">CH6 关系数据理论</a></h1>
-<p>数据依赖：函数依赖和多值依赖</p>
-<ul>
-<li>完全函数依赖：如果 $X \rightarrow Y$， 并且对于 $X$ 的任何一个真子集 $X'$，都有 $X'$ not $\rightarrow Y$，则称 $Y$ 对 $X$ 完全函数依赖。</li>
-<li>部分函数依赖：若 $X \rightarrow Y$， 但 $Y$ 不完全函数依赖于 $X$，则称 $Y$ 对 $X$ 部分函数依赖。
-传递函数依赖：在 $R(U)$ 中，如果 $X \rightarrow Y (Y \not\subseteq X)$，$Y \not\subseteq Z$，$Z \not\subseteq Y$，则称 $Z$ 对 $X$ 传递函数依赖。</li>
-<li>多值函数依赖：$X \rightarrow\rightarrow Y$。当且仅当对 $R(U)$ 的任一关系 $r$，给定的一对 $(x, z)$ 值，有一组 $Y$ 的值，这组值仅仅决定于 $x$ 值而与 $z$ 无关。</li>
-</ul>
-<p>1NF：关系的每一个分量必须是一个不可分的数据项。
-2NF，3NF，BCNF，4NF：P181-P188</p>
-<p>如果表的范式级别低，容易出现什么问题？能举例说明其中一个问题；P179</p>
-<ul>
-<li>数据冗余。</li>
-<li>更新异常。</li>
-<li>插入异常。</li>
-<li>删除异常。</li>
-</ul>
-<p>给出部分函数依赖和完全函数依赖的说明；P181</p>
-<p>给出码的2个等价定义；全码 VS. 所有属性均为主属性。</p>
-<ul>
-<li>P40；P181；</li>
-<li>全码是整个属性组是码，只有一个码。所有属性均为主属性可能有多个码，多个码的并集为整个属性组。
-全码一定是所有属性均为主属性。</li>
-</ul>
-<p>什么是函数依赖的逻辑蕴涵概念？</p>
-<ul>
-<li>设有关系模式R(U,F)，X $\subseteq$ U、Y $\subseteq$ U，如果从 F 中的函数依赖能够推导出 X $\rightarrow$ Y ，则称F逻辑蕴涵X $\rightarrow$ Y，或称X $\rightarrow$ Y 是 F 的逻辑蕴涵。</li>
-</ul>
-<p>Armstrong公理；</p>
-<ul>
-<li>设有关系模式R(U,F)，X、Y、Z均为U的子集，推理规则如下：
-<ul>
-<li>自反律：如果 Y $\subseteq$ X，则 X $\rightarrow$ Y；</li>
-<li>增广律：如果 X $\rightarrow$ Y，则 XZ $\rightarrow$ YZ；</li>
-<li>传递律：如果 X $\rightarrow$ Y、Y $\rightarrow$ Z，则 X $\rightarrow$ Z 。</li>
-</ul>
-</li>
-</ul>
-<p>模式分解的2个准则；</p>
-<ul>
-<li>无损连接分解。无损连接是指分解后的关系经过自然连接可以恢复成原来的关系。</li>
-<li>保持函数依赖分解。保持函数依赖是指分解后的关系不能破坏原来的函数依赖（不能破坏原来的语义）。</li>
-</ul>
-<p>保持函数依赖的模式分解是什么意思？</p>
-<ul>
-<li>保持函数依赖是指分解后的关系不能破坏原来的函数依赖（不能破坏原来的语义）。</li>
-</ul>
+                        <h1 id="document-not-found-404"><a class="header" href="#document-not-found-404">Document not found (404)</a></h1>
+<p>This URL is invalid, sorry. Please use the navigation bar or search to continue.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="CH5.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                                <i class="fa fa-angle-left"></i>
-                            </a>
 
-                            <a rel="next" href="CH7.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -207,33 +157,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="CH5.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                        <i class="fa fa-angle-left"></i>
-                    </a>
 
-                    <a rel="next" href="CH7.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
-                    </a>
             </nav>
 
         </div>
 
-        <!-- Livereload script (if served using the cli tool) -->
-        <script>
-            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
-            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
-            const socket = new WebSocket(wsAddress);
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
 
 
 

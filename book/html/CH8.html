@@ -1,9 +1,9 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="zh" class="sidebar-visible no-js light">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>CH10 数据库恢复技术</title>
+        <title>CH8 数据库编程 - 笔记</title>
 
 
         <!-- Custom HTML head -->
@@ -80,7 +80,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="CH1.html"><strong aria-hidden="true">1.</strong> CH1 绪论</a></li><li class="chapter-item expanded "><a href="CH2.html"><strong aria-hidden="true">2.</strong> CH2 关系数据库/关系数据模型理论</a></li><li class="chapter-item expanded "><a href="CH3.html"><strong aria-hidden="true">3.</strong> CH3 SQL</a></li><li class="chapter-item expanded "><a href="CH4.html"><strong aria-hidden="true">4.</strong> CH4 数据库安全性</a></li><li class="chapter-item expanded "><a href="CH5.html"><strong aria-hidden="true">5.</strong> CH5 数据库完整性</a></li><li class="chapter-item expanded "><a href="CH6.html"><strong aria-hidden="true">6.</strong> CH6 关系数据理论</a></li><li class="chapter-item expanded "><a href="CH7.html"><strong aria-hidden="true">7.</strong> CH7 数据库设计</a></li><li class="chapter-item expanded "><a href="CH8.html"><strong aria-hidden="true">8.</strong> CH8 数据库编程</a></li><li class="chapter-item expanded "><a href="CH10.html" class="active"><strong aria-hidden="true">9.</strong> CH10 数据库恢复技术</a></li><li class="chapter-item expanded "><a href="CH11.html"><strong aria-hidden="true">10.</strong> CH11 并发控制</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="CH1.html"><strong aria-hidden="true">1.</strong> CH1 绪论</a></li><li class="chapter-item expanded "><a href="CH2.html"><strong aria-hidden="true">2.</strong> CH2 关系数据库/关系数据模型理论</a></li><li class="chapter-item expanded "><a href="CH3.html"><strong aria-hidden="true">3.</strong> CH3 SQL</a></li><li class="chapter-item expanded "><a href="CH4.html"><strong aria-hidden="true">4.</strong> CH4 数据库安全性</a></li><li class="chapter-item expanded "><a href="CH5.html"><strong aria-hidden="true">5.</strong> CH5 数据库完整性</a></li><li class="chapter-item expanded "><a href="CH6.html"><strong aria-hidden="true">6.</strong> CH6 关系数据理论</a></li><li class="chapter-item expanded "><a href="CH7.html"><strong aria-hidden="true">7.</strong> CH7 数据库设计</a></li><li class="chapter-item expanded "><a href="CH8.html" class="active"><strong aria-hidden="true">8.</strong> CH8 数据库编程</a></li><li class="chapter-item expanded "><a href="CH10.html"><strong aria-hidden="true">9.</strong> CH10 数据库恢复技术</a></li><li class="chapter-item expanded "><a href="CH11.html"><strong aria-hidden="true">10.</strong> CH11 并发控制</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -109,7 +109,7 @@
                         </button>
                     </div>
 
-                    <h1 class="menu-title"></h1>
+                    <h1 class="menu-title">笔记</h1>
 
                     <div class="right-buttons">
                         <a href="print.html" title="Print this book" aria-label="Print this book">
@@ -141,75 +141,33 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="ch10-数据库恢复技术-恢复机制的工作原理数据冗余"><a class="header" href="#ch10-数据库恢复技术-恢复机制的工作原理数据冗余">CH10 数据库恢复技术 //恢复机制的工作原理：数据冗余</a></h1>
-<p>事务的 4 个特性是什么？举例说明其中的一个特性；</p>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<h1 id="ch8-数据库编程"><a class="header" href="#ch8-数据库编程">CH8 数据库编程</a></h1>
+<p>存储过程的作用及使用方法？</p>
 <ul>
-<li>原子性（Atomicity）//出故障
-事务的原子性强调了一个事务是一个逻辑工作单元，是一个整体，是不可分割的。一个事务所包含的操作要么全部做，要么全部不做。</li>
-<li>一致性（Consistency）//事务的一致性
-一个事务执行一项数据库操作，事务将使数据库从一种一致性的状态变换成另一种一致性状态。 
-在事务执行前，总是假设数据库是一致的，那么当事务成功执行后，数据库肯定仍然是一致的。//可串行化调度/2PL协议</li>
-<li>隔离性（Isolation）
-如果每个事务单独执行能保持原子性和一致性，这些事务并发执行也能保持原子性和一致性，则是事务的隔离性。//封锁机制/时间印协议</li>
-<li>持续性（Durability ）//出故障
-事务的持久性是指一旦事务成功完成，该事务对数据库所施加的所有更新都是永久的。 //数据库备份技术</li>
+<li>存储过程：由PL/SQL语句书写的过程，经编译和优化后存储在数据库服务器中，使用时只要调用即可。 </li>
+<li>创建存储过程：
+CREATE Procedure 过程名（［参数1，参数2，...］） AS	&lt;PL/SQL块&gt;；
+过程名：数据库服务器合法的对象标识
+参数列表：用名字来标识调用时给出的参数值，必须指定值的数据类型。参数也可以定义输入参数、输出参数或输入/输出参数。默认为输入参数。
+过程体：是一个&lt;PL/SQL块&gt;。包括声明部分和可执行语句部分</li>
+<li>执行存储过程： 
+CALL/PERFORM  Procedure 过程名(［参数1，参数2，...］)；
+使用CALL或者PERFORM等方式激活存储过程的执行。
+在PL/SQL中，数据库服务器支持在过程体中调用其他存储过程</li>
+<li>删除存储过程
+DROP  PROCEDURE 过程名()；</li>
 </ul>
-<p>故障类型有哪些？举例说明；</p>
-<ul>
-<li>事务内部的故障
-<ul>
-<li>有的是可以通过事务程序本身发现的(见下面转账事务的例子)</li>
-<li>有的是非预期的</li>
-</ul>
-</li>
-<li>系统故障
-称为软故障，是指造成系统停止运转的任何事件，使得系统要重新启动。 
-<ul>
-<li>整个系统的正常运行突然被破坏</li>
-<li>所有正在运行的事务都非正常终止</li>
-<li>不破坏数据库</li>
-<li>内存中数据库缓冲区的信息全部丢失</li>
-</ul>
-</li>
-<li>介质故障
-称为硬故障，指外存故障
-<ul>
-<li>磁盘损坏</li>
-<li>磁头碰撞</li>
-<li>操作系统的某种潜在错误</li>
-<li>瞬时强磁场干扰</li>
-</ul>
-</li>
-<li>计算机病毒
-<ul>
-<li>一种人为的故障或破坏，是一些恶作剧者研制的一种计算机程序</li>
-<li>可以繁殖和传播</li>
-</ul>
-</li>
-</ul>
-<p>基于检查点故障恢复策略；日志文件概念；</p>
-<ul>
-<li>基于检查点故障恢复策略：</li>
-<li>日志文件是用来记录事务对数据库的更新操作的文件。
-对于以记录为单位的日志文件，日志文件中需要登记的内容包括：
-<ul>
-<li>各个事务的开始标记。</li>
-<li>各个事务的结束标记。</li>
-<li>各个事务的所有更新操作。</li>
-</ul>
-</li>
-</ul>
-<p>故障恢复策略的工作原理：冗余。</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="CH8.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="CH7.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="CH11.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="CH10.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -219,33 +177,17 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="CH8.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="CH7.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="CH11.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="CH10.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
 
         </div>
 
-        <!-- Livereload script (if served using the cli tool) -->
-        <script>
-            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
-            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
-            const socket = new WebSocket(wsAddress);
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
 
 
 

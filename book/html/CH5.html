@@ -1,9 +1,9 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="zh" class="sidebar-visible no-js light">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>CH11 并发控制</title>
+        <title>CH5 数据库完整性 - 笔记</title>
 
 
         <!-- Custom HTML head -->
@@ -80,7 +80,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="CH1.html"><strong aria-hidden="true">1.</strong> CH1 绪论</a></li><li class="chapter-item expanded "><a href="CH2.html"><strong aria-hidden="true">2.</strong> CH2 关系数据库/关系数据模型理论</a></li><li class="chapter-item expanded "><a href="CH3.html"><strong aria-hidden="true">3.</strong> CH3 SQL</a></li><li class="chapter-item expanded "><a href="CH4.html"><strong aria-hidden="true">4.</strong> CH4 数据库安全性</a></li><li class="chapter-item expanded "><a href="CH5.html"><strong aria-hidden="true">5.</strong> CH5 数据库完整性</a></li><li class="chapter-item expanded "><a href="CH6.html"><strong aria-hidden="true">6.</strong> CH6 关系数据理论</a></li><li class="chapter-item expanded "><a href="CH7.html"><strong aria-hidden="true">7.</strong> CH7 数据库设计</a></li><li class="chapter-item expanded "><a href="CH8.html"><strong aria-hidden="true">8.</strong> CH8 数据库编程</a></li><li class="chapter-item expanded "><a href="CH10.html"><strong aria-hidden="true">9.</strong> CH10 数据库恢复技术</a></li><li class="chapter-item expanded "><a href="CH11.html" class="active"><strong aria-hidden="true">10.</strong> CH11 并发控制</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="CH1.html"><strong aria-hidden="true">1.</strong> CH1 绪论</a></li><li class="chapter-item expanded "><a href="CH2.html"><strong aria-hidden="true">2.</strong> CH2 关系数据库/关系数据模型理论</a></li><li class="chapter-item expanded "><a href="CH3.html"><strong aria-hidden="true">3.</strong> CH3 SQL</a></li><li class="chapter-item expanded "><a href="CH4.html"><strong aria-hidden="true">4.</strong> CH4 数据库安全性</a></li><li class="chapter-item expanded "><a href="CH5.html" class="active"><strong aria-hidden="true">5.</strong> CH5 数据库完整性</a></li><li class="chapter-item expanded "><a href="CH6.html"><strong aria-hidden="true">6.</strong> CH6 关系数据理论</a></li><li class="chapter-item expanded "><a href="CH7.html"><strong aria-hidden="true">7.</strong> CH7 数据库设计</a></li><li class="chapter-item expanded "><a href="CH8.html"><strong aria-hidden="true">8.</strong> CH8 数据库编程</a></li><li class="chapter-item expanded "><a href="CH10.html"><strong aria-hidden="true">9.</strong> CH10 数据库恢复技术</a></li><li class="chapter-item expanded "><a href="CH11.html"><strong aria-hidden="true">10.</strong> CH11 并发控制</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -109,7 +109,7 @@
                         </button>
                     </div>
 
-                    <h1 class="menu-title"></h1>
+                    <h1 class="menu-title">笔记</h1>
 
                     <div class="right-buttons">
                         <a href="print.html" title="Print this book" aria-label="Print this book">
@@ -141,131 +141,66 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="ch11-并发控制"><a class="header" href="#ch11-并发控制">CH11 并发控制</a></h1>
-<p>什么是事务的串行调度？并发调度？</p>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<h1 id="ch5-数据库完整性数据库的一致性ic业务规则动态"><a class="header" href="#ch5-数据库完整性数据库的一致性ic业务规则动态">CH5 数据库完整性//数据库的一致性：IC+业务规则（动态）</a></h1>
+<p>数据的完整性：</p>
 <ul>
-<li>串行调度：一个调度中，属于一个事务的所有操作连续执行，称之为串行调度。 </li>
-<li>并发调度：多个事务同时执行的调度。</li>
+<li>数据的正确性</li>
+<li>数据的相容性</li>
+<li>防止不合语义，不正确的数据</li>
 </ul>
-<p>如果不加以控制，事务的并发调度可能会产生什么问题？</p>
+<p>DMBS提供的三个功能：</p>
 <ul>
-<li>丢失修改
+<li>定义<strong>完整性约束</strong>条件的机制</li>
+<li>提供<strong>完整性检查</strong>的方法</li>
+<li><strong>违约处理</strong></li>
+</ul>
+<p>完整性违规的处理方式；</p>
 <ul>
-<li>两个事务 $T_1$ 和 $T_2$ 读入同一数据并修改，$T_2$ 提交的结果破坏了 $T_1$ 提交的结果，导致 $T_1$ 的修改被丢失。</li>
+<li>用PRIMARY KEY定义了关系的主码后，每当用户对基本表插入一条记录或对主码进行更新操作时，DBMS将进行如下的检查：
+<ul>
+<li>检查主码是否唯一，如果不唯一则拒绝插入或修改；</li>
+<li>检查主码的各个属性是否为空，只要有一个为空就拒绝插入或修改。</li>
 </ul>
 </li>
-<li>不可重复读
+<li>参照完整性检查和违约处理 PPT P31</li>
+</ul>
+<p>完整性约束命名子句 CONSTRAINT的使用；PPT P38</p>
+<p>叙述触发器的作用及使用方法；</p>
 <ul>
-<li>指事务 $T_1$ 读取数据后，事务 $T_2$ 执行更新操作，使 $T_1$ 无法再现前一次读取结果。</li>
+<li>触发器是用户定义在关系表上的一类由事件驱动的特殊过程。一旦定义，任何对表的增、删、改操作均由服务器自动激活相应的触发器。
+<ul>
+<li>由服务器自动激活</li>
+<li>可以进行更为复杂的检查和操作，具有更精细和更强大的数据控制能力 </li>
 </ul>
 </li>
-<li>读脏数据
+<li>触发器的执行,是由触发事件激活的,并由数据库服务器自动执行的。一个表上可能定义了多个触发器，比如多个BEFORE触发器，多个AFTER触发器等。同一个表上的多个触发器激活时遵循如下的执行顺序：
 <ul>
-<li>指事务 $T_1$ 修改某一数据并将其写回磁盘，事务 $T_2$ 读取同一数据后，$T_1$ 由于某种原因被撤销，这时被 $T_1$ 修改过的数据恢复原值， $T_2$ 读到的数据就与数据库中的数据不一致，则 $T_2$ 读到的数据就为脏数据。</li>
-</ul>
-</li>
-</ul>
-<p>简述封锁机制的工作原理；</p>
-<ul>
-<li>封锁就是事务 $T$ 在对某个数据对象（例如表、记录等）操作之前，先向系统发出请求，对其加锁。</li>
-<li>加锁后事务 $T$ 就对该数据对象有了一定的控制，在事务T释放它的锁之前，其它的事务不能更新此数据对象。</li>
-</ul>
-<p>引入封锁机制，如何解决上述3个问题？</p>
-<p><img src="./pic/11-1.bmp" alt="" /></p>
-<p><img src="./pic/11-2.bmp" alt="" /></p>
-<p><img src="./pic/11-3.bmp" alt="" /></p>
-<p>死锁预防</p>
-<ul>
-<li>一次封锁法
-<ul>
-<li>要求每个事务必须一次将所有要使用的数据全部加锁，否则就不能继续执行</li>
-<li>存在的问题
-<ul>
-<li>降低系统并发度</li>
-<li>难于事先精确确定封锁对象</li>
+<li>执行该表上的BEFORE触发器；</li>
+<li>激活触发器的SQL语句；</li>
+<li>执行该表上的AFTER触发器。</li>
+<li>对于同一种类型的BEFORE/AFTER触发器，按照“谁先创建谁先执行”的原则执行。</li>
 </ul>
 </li>
 </ul>
-</li>
-<li>顺序封锁法
+<p>在SQL SERVER中，三类触发器。</p>
 <ul>
-<li>顺序封锁法是预先对数据对象规定一个封锁顺序，所有事务都按这个顺序实行封锁。</li>
-<li>顺序封锁法存在的问题
-<ul>
-<li>维护成本：数据库系统中封锁的数据对象极多，并且在不断地变化。</li>
-<li>难以实现：很难事先确定每一个事务要封锁哪些对象</li>
+<li>插入触发器；</li>
+<li>更新触发器；</li>
+<li>删除触发器。</li>
 </ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>死锁诊断、死锁的判别；</p>
-<ul>
-<li>超时法
-<ul>
-<li>如果一个事务的等待时间超过了规定的时限，就认为发生了死锁</li>
-<li>优点：实现简单</li>
-<li>缺点
-<ul>
-<li>有可能误判死锁</li>
-<li>时限若设置得太长，死锁发生后不能及时发现</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>事务等待图法
-<ul>
-<li>用事务等待图动态反映所有事务的等待情况
-<ul>
-<li>事务等待图是一个有向图G=(T，U)</li>
-<li>T为结点的集合，每个结点表示正运行的事务</li>
-<li>U为边的集合，每条边表示事务等待的情况</li>
-<li>若T1等待T2，则T1，T2之间划一条有向边，从T1指向T2</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>冲突操作对；</p>
-<ul>
-<li>指不同事物对同一个数据的读写操作和写写操作。</li>
-</ul>
-<p>事务优先图；</p>
-<p>等价的串行调度；</p>
-<p>2PL协议；</p>
-<ul>
-<li>指所有事务必须分两个阶段对数据项加锁和解锁 
-<ul>
-<li>在对任何数据进行读、写操作之前，事务首先要获得对该数据的封锁</li>
-<li>在释放一个封锁之后，事务不再申请和获得任何其他封锁</li>
-</ul>
-</li>
-</ul>
-<p>多粒度封锁协议。</p>
-<ul>
-<li>在一个系统中同时支持多种封锁粒度供不同的事务选择</li>
-<li>选择封锁粒度
-<ul>
-<li>同时考虑封锁开销和并发度两个因素，适当选择封锁粒度
-<ul>
-<li>需要处理多个关系的大量元组的用户事务：以数据库为封锁单位</li>
-<li>需要处理大量元组的用户事务：以关系为封锁单元</li>
-<li>只处理少量元组的用户事务：以元组为封锁单位</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>在多粒度封锁中一个数据对象可能以两种方式封锁：显式封锁和隐式封锁</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="CH10.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="CH4.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
+                            <a rel="next" href="CH6.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -273,30 +208,17 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="CH10.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="CH4.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
+                    <a rel="next" href="CH6.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>
 
-        <!-- Livereload script (if served using the cli tool) -->
-        <script>
-            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
-            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
-            const socket = new WebSocket(wsAddress);
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
 
 
 
